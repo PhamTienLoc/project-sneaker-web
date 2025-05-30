@@ -15,6 +15,10 @@ public enum ErrorCode {
 
     // Product: 1200–1299
     PRODUCT_NOT_FOUND(1200, "Product not found"),
+    NAME_MUST_NOT_BE_BLANK(1201, "Tên không được để trống"),
+    PRICE_MUST_NOT_BE_NULL(1202, "Giá không được để trống"),
+    PRICE_MUST_BE_POSITIVE (1203, "Giá phải lớn hơn 0"),
+    BRAND_ID_REQUIRED (1204, "Phải chọn thương hiệu"),
 
     // Cart: 1300–1399
     CART_EMPTY(1300, "Cart is empty"),
