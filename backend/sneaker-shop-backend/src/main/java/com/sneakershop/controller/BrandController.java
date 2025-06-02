@@ -6,7 +6,9 @@ import com.sneakershop.dto.request.BrandUpdateRequest;
 import com.sneakershop.dto.response.BrandResponse;
 import com.sneakershop.service.BrandService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/brands")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BrandController {
-
-    private final BrandService brandService;
+    BrandService brandService;
 
     @PostMapping
     public ApiResponse<BrandResponse> createBrand(@Valid @RequestBody BrandCreateRequest request) {
