@@ -1,9 +1,11 @@
 package com.sneakershop.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -12,27 +14,24 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-
-    private String description;
-
-    private BigDecimal price;
+    Long id;
+    String name;
+    String description;
+    BigDecimal price;
 
     @ElementCollection
-    private Set<String> sizes;
+    Set<String> sizes;
 
     @ElementCollection
-    private Set<String> colors;
+    Set<String> colors;
 
     @ManyToOne
     @JoinColumn(name = "brand_id")
-    private Brand brand;
+    Brand brand;
 
     @ManyToMany
     @JoinTable(
@@ -40,8 +39,5 @@ public class Product extends BaseEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Image> images;
+    Set<Category> categories;
 }

@@ -4,22 +4,25 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
 @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseEntity {
 
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-    private Boolean isActive = true;
+    Boolean isActive = true;
 
     @PrePersist
     protected void onCreate() {

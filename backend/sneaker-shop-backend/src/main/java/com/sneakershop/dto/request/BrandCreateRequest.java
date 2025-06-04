@@ -13,5 +13,4 @@ public class BrandCreateRequest {
     @NotBlank(message = "BRAND_NAME_MUST_NOT_BE_BLANK")
     String name;
     String description;
-    String image;
 }

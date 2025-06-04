@@ -9,6 +9,7 @@ import com.sneakershop.exception.ErrorCode;
 import com.sneakershop.mapper.BrandMapper;
 import com.sneakershop.repository.BrandRepository;
 import com.sneakershop.service.BrandService;
+import com.sneakershop.service.ImageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,7 @@ import java.util.List;
 public class BrandServiceImpl implements BrandService {
     BrandRepository brandRepository;
     BrandMapper brandMapper;
+    ImageService imageService;
 
     @Override
     public BrandResponse createBrand(BrandCreateRequest request) {
@@ -36,12 +38,24 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public BrandResponse getBrandById(Long id) {
-        return brandMapper.toBrandResponse(brandRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_FOUND)));
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_FOUND));
+
+        BrandResponse response = brandMapper.toBrandResponse(brand);
+
+        response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+
+        return response;
     }
 
     @Override
     public List<BrandResponse> getAllBrands() {
-        return brandRepository.findAll().stream().map(brandMapper::toBrandResponse).toList();
+        return brandRepository.findAll().stream()
+                .map(brand -> {
+                    BrandResponse response = brandMapper.toBrandResponse(brand);
+                    response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+                    return response;
+                })
+                .toList();
     }
 
     @Override

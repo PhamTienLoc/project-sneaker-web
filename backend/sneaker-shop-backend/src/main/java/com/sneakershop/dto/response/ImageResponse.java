@@ -3,16 +3,14 @@ package com.sneakershop.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BrandResponse {
+public class ImageResponse {
     Long id;
-    String name;
-    String description;
-    List<ImageResponse> images;
+    String path;
+    String type;
+    Long objectId;
 }

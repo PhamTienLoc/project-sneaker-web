@@ -1,9 +1,11 @@
 package com.sneakershop.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
@@ -11,16 +13,13 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-
-    private String description;
-
+    Long id;
+    String name;
+    String description;
     @ManyToMany(mappedBy = "categories")
-    private Set<Product> products;
+    Set<Product> products;
 }

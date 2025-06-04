@@ -19,9 +19,9 @@ public class ProductResponse {
     Double price;
     Set<String> sizes;
     Set<String> colors;
-    String brandName;
-    List<String> imageLinks;
-    List<String> categoryNames;
+    BrandResponse brand;
+    List<ImageResponse> images;
+    List<CategoryResponse> categories;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

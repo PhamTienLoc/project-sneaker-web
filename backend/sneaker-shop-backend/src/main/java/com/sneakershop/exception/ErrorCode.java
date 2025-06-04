@@ -25,6 +25,15 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(1208, "Category not found"),
     CATEGORY_NAME_BLANK(1209, "Tên không được để trống"),
     CATEGORY_NAME_EXISTS(1210, "Tên danh mục đã tồn tại"),
+    FILE_INIT_FAILED(1211, "Khởi tạo thư mục gốc thất bại"),
+    FILE_NOT_FOUND(1212, "Không tìm thấy ảnh"),
+    FILE_LOAD_FAILED(1212, "Không tải ảnh lên được"),
+    FILE_DELETE_FAILED(1212, "Không xóa ảnh được"),
+    IMAGE_NOT_FOUND(1213, "Không tìm thấy ảnh"),
+    INVALID_IMAGE_TYPE(1214, "Loại ảnh không hợp lệ"),
+    FILE_UPLOAD_FAILED(1215, "Lỗi khi upload file"),
+    IMAGE_SAVE_FAILED(1216, "Không thể lưu ảnh vào database"),
+    UNSUPPORTED_FILE_FORMAT(1217, "Định dạng ảnh không được hỗ trợ"),
 
     // Cart: 1300–1399
     CART_EMPTY(1300, "Cart is empty"),
