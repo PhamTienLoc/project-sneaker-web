@@ -1,6 +1,6 @@
 package com.sneakershop.controller;
 
-import com.sneakershop.dto.request.ApiResponse;
+import com.sneakershop.dto.response.ApiResponse;
 import com.sneakershop.dto.request.BrandCreateRequest;
 import com.sneakershop.dto.request.BrandUpdateRequest;
 import com.sneakershop.dto.response.BrandResponse;
@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,9 +38,9 @@ public class BrandController {
     }
 
     @GetMapping
-    public ApiResponse<List<BrandResponse>> getAllBrands() {
-        return ApiResponse.<List<BrandResponse>>builder()
-                .result(brandService.getAllBrands())
+    public ApiResponse<Page<BrandResponse>> getAllBrands(Pageable pageable) {
+        return ApiResponse.<Page<BrandResponse>>builder()
+                .result(brandService.getAllBrands(pageable))
                 .build();
     }
 

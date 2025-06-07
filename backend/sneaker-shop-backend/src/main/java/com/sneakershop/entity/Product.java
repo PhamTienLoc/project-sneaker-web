@@ -19,6 +19,7 @@ public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
     String description;
     BigDecimal price;
@@ -33,11 +34,8 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "brand_id")
     Brand brand;
 
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    Set<Category> categories;
+    @ElementCollection
+    @CollectionTable(name = "product_category_ids", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "category_id")
+    Set<Long> categoryIds;
 }

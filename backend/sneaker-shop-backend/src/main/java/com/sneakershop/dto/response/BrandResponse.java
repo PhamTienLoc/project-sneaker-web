@@ -3,6 +3,7 @@ package com.sneakershop.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,4 +16,8 @@ public class BrandResponse {
     String name;
     String description;
     List<ImageResponse> images;
+
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+    Boolean isActive;
 }

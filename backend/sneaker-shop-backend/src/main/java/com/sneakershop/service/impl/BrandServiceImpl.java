@@ -13,6 +13,8 @@ import com.sneakershop.service.ImageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,14 +50,12 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<BrandResponse> getAllBrands() {
-        return brandRepository.findAll().stream()
-                .map(brand -> {
-                    BrandResponse response = brandMapper.toBrandResponse(brand);
-                    response.setImages(imageService.getImagesByObject("brand", brand.getId()));
-                    return response;
-                })
-                .toList();
+    public Page<BrandResponse> getAllBrands(Pageable pageable) {
+        return brandRepository.findAll(pageable).map(brand -> {
+            BrandResponse response = brandMapper.toBrandResponse(brand);
+            response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+            return response;
+        });
     }
 
     @Override

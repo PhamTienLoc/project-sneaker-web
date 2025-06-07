@@ -20,6 +20,4 @@ public class Category extends BaseEntity {
     Long id;
     String name;
     String description;
-    @ManyToMany(mappedBy = "categories")
-    Set<Product> products;
 }

@@ -12,4 +12,5 @@ import lombok.experimental.FieldDefaults;
 public class CategoryUpdateRequest {
     String name;
     String description;
+    Boolean isActive;
 }

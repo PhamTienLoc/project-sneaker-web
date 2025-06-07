@@ -1,6 +1,6 @@
 package com.sneakershop.controller;
 
-import com.sneakershop.dto.request.ApiResponse;
+import com.sneakershop.dto.response.ApiResponse;
 import com.sneakershop.dto.response.ImageResponse;
 import com.sneakershop.service.FileStorageService;
 import com.sneakershop.service.ImageService;

@@ -34,6 +34,9 @@ public enum ErrorCode {
     FILE_UPLOAD_FAILED(1215, "Lỗi khi upload file"),
     IMAGE_SAVE_FAILED(1216, "Không thể lưu ảnh vào database"),
     UNSUPPORTED_FILE_FORMAT(1217, "Định dạng ảnh không được hỗ trợ"),
+    PRODUCT_NAME_EXISTS(1218, "Tên sản phẩm đã tồn tại"),
+    INVALID_LIMIT(1219, "Số lượng sản phẩm mới không hợp lệ"),
+
 
     // Cart: 1300–1399
     CART_EMPTY(1300, "Cart is empty"),

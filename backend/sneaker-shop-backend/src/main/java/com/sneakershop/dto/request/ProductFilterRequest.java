@@ -3,7 +3,9 @@ package com.sneakershop.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -13,8 +15,10 @@ import java.util.List;
 public class ProductFilterRequest {
     Long brandId;
     List<Long> categoryIds;
-    Double minPrice;
-    Double maxPrice;
+    BigDecimal minPrice;
+    BigDecimal maxPrice;
     String keyword;
+    Set<String> colors;
+    Set<String> sizes;
     Boolean isActive;
 }

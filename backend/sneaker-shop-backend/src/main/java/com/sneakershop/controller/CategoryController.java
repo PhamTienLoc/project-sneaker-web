@@ -3,11 +3,13 @@ package com.sneakershop.controller;
 import com.sneakershop.dto.request.CategoryCreateRequest;
 import com.sneakershop.dto.request.CategoryUpdateRequest;
 import com.sneakershop.dto.response.CategoryResponse;
-import com.sneakershop.dto.request.ApiResponse;
+import com.sneakershop.dto.response.ApiResponse;
 import com.sneakershop.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +37,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ApiResponse<List<CategoryResponse>> getAllCategories() {
-        return ApiResponse.<List<CategoryResponse>>builder()
-                .result(categoryService.getAllCategories())
+    public ApiResponse<Page<CategoryResponse>> getAllCategories(Pageable pageable) {
+        return ApiResponse.<Page<CategoryResponse>>builder()
+                .result(categoryService.getAllCategories(pageable))
                 .build();
     }
 

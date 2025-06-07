@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
@@ -17,16 +18,17 @@ public class ProductCreateRequest {
     @NotBlank(message = "NAME_MUST_NOT_BE_BLANK")
     String name;
 
+    String description;
+
     @NotNull(message = "PRICE_MUST_NOT_BE_NULL")
     @Positive(message = "PRICE_MUST_BE_POSITIVE")
-    Double price;
+    BigDecimal price;
 
-    String description;
+    Set<String> sizes;
+    Set<String> colors;
 
     @NotNull(message = "BRAND_ID_REQUIRED")
     Long brandId;
 
-    Set<String> sizes;
-    Set<String> colors;
     Set<Long> categoryIds;
 }

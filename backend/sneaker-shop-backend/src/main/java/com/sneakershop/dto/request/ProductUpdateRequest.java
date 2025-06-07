@@ -3,6 +3,7 @@ package com.sneakershop.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
@@ -12,10 +13,11 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductUpdateRequest {
     String name;
-    Double price;
     String description;
-    Long brandId;
+    BigDecimal price;
     Set<String> sizes;
     Set<String> colors;
+    Long brandId;
     Set<Long> categoryIds;
+    Boolean isActive;
 }
