@@ -1,4 +1,4 @@
-package com.sneakershop.dto.request;
+package com.sneakershop.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

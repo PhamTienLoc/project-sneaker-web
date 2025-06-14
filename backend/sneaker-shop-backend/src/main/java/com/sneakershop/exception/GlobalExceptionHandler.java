@@ -1,6 +1,6 @@
 package com.sneakershop.exception;
 
-import com.sneakershop.dto.request.ApiResponse;
+import com.sneakershop.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
