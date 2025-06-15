@@ -12,6 +12,8 @@ public enum ErrorCode {
     INVALID_PASSWORD(1103, "Password must be at least 8 characters"),
     USER_NOT_EXISTED(1104, "User not exists"),
     UNAUTHENTICATED(1105, "Unauthenticated"),
+    EMAIL_EXISTED(1106, "Email already exists"),
+    ROLE_NOT_FOUND(1107, "Role not found"),
 
     // Product: 1200–1299
     PRODUCT_NOT_FOUND(1200, "Product not found"),
@@ -40,6 +42,10 @@ public enum ErrorCode {
 
     // Cart: 1300–1399
     CART_EMPTY(1300, "Cart is empty"),
+    ITEM_NOT_FOUND(1301, "Không tìm thấy sản phẩm"),
+    INVALID_SIZE(1302, "Size giày không hợp lệ"),
+    INVALID_COLOR(1301, "Màu giày không hợp lệ"),
+
 
     // Order: 1400–1499
     ORDER_NOT_FOUND(1400, "Order not found");
