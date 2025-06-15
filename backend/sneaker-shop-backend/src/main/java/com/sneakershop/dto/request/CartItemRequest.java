@@ -7,16 +7,16 @@ import lombok.Data;
 
 @Data
 public class CartItemRequest {
-    @NotNull(message = "Product ID is required")
+    @NotNull(message = "PRODUCT_ID_REQUIRED")
     private Long productId;
 
-    @NotBlank(message = "Size is required")
+    @NotBlank(message = "SIZE_REQUIRED")
     private String size;
 
-    @NotBlank(message = "Color is required")
+    @NotBlank(message = "COLOR_REQUIRED")
     private String color;
 
-    @NotNull(message = "Quantity is required")
-    @Min(value = 1, message = "Quantity must be at least 1")
+    @NotNull(message = "QUANTITY_REQUIRED")
+    @Min(value = 1, message = "QUANTITY_MINIMUM")
     private Integer quantity;
 }
