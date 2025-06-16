@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class ImageController {
     FileStorageService fileStorageService;
 
     @PostMapping("/upload")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<ImageResponse>> uploadImages(@RequestParam("type") String type, @RequestParam("objectId") Long objectId, @RequestParam("files") MultipartFile[] files) {
         return ApiResponse.<List<ImageResponse>>builder()
                 .message("Upload thành công")

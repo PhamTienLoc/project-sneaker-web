@@ -23,6 +23,8 @@ public abstract class OrderItemMapper {
     @Mapping(target = "productName", source = "product.name")
     @Mapping(target = "subtotal", source = ".", qualifiedByName = "calculateSubtotal")
     @Mapping(target = "image", source = "product", qualifiedByName = "getFirstImage")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
     public abstract OrderItemResponse toResponse(OrderItem orderItem);
 
     @Named("calculateSubtotal")

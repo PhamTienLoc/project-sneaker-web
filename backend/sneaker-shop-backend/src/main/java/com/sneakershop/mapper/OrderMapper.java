@@ -14,6 +14,8 @@ import java.util.List;
 public interface OrderMapper {
     @Mapping(target = "totalAmount", source = "items", qualifiedByName = "calculateTotalAmount")
     @Mapping(target = "items", source = "items")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
     OrderResponse toResponse(Order order);
 
     @Named("calculateTotalAmount")

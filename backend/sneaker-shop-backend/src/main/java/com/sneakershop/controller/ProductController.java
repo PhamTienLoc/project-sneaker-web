@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<ProductResponse> createProduct(@RequestBody @Valid ProductCreateRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .message("Tạo sản phẩm thành công")
@@ -53,6 +55,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductUpdateRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .message("Cập nhật sản phẩm thành công")
@@ -61,6 +64,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<?> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ApiResponse.builder()
@@ -99,6 +103,7 @@ public class ProductController {
     }
 
     @GetMapping("/stats")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Object> getProductStatistics(@RequestParam(required = false) Integer pageSize) {
         return ApiResponse.builder()
                 .result(productService.getProductStatistics(pageSize))
