@@ -123,7 +123,22 @@ const ProductsPage = () => {
     return 'Tất cả sản phẩm'
   }
 
-  const availableColors = ['black', 'white', 'gray', 'red', 'blue', 'yellow', 'pink', 'purple']
+  const availableColors = ['Đen', 'Trắng', 'Xám', 'Đỏ', 'Xanh', 'Vàng', 'Hồng', 'Tím', 'Cam', 'Nâu', 'Xanh lá', 'Xanh dương']
+  const COLOR_MAP = {
+    'Đen': '#000000',
+    'Trắng': '#ffffff',
+    'Xám': '#808080',
+    'Đỏ': '#ff0000',
+    'Xanh': '#008000',
+    'Vàng': '#ffff00',
+    'Hồng': '#ff69b4',
+    'Tím': '#800080',
+    'Cam': '#ffa500',
+    'Nâu': '#8b4513',
+    'Xanh lá': '#00ff00',
+    'Xanh dương': '#0000ff',
+    'white': '#ffffff'
+  }
   const availableSizes = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
 
   if (error) {
@@ -216,7 +231,7 @@ const ProductsPage = () => {
                 <h4 className="font-medium text-gray-900 mb-3">Màu sắc</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {availableColors.map((color) => (
-                    <label key={color} className="flex items-center">
+                    <label key={color} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={filters.colors.includes(color)}
@@ -225,7 +240,12 @@ const ProductsPage = () => {
                         }
                         className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{color}</span>
+                      <div
+                        className="w-4 h-4 rounded-full border border-gray-300"
+                        title={color}
+                        style={{ backgroundColor: COLOR_MAP[color] || '#fff' }}
+                      ></div>
+                      <span className="text-sm text-gray-700">{color}</span>
                     </label>
                   ))}
                 </div>

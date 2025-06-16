@@ -34,8 +34,23 @@ const LoginPage = () => {
         return
       }
 
-      // Force a page reload to update the auth state
-      window.location.href = '/'
+      // Lấy roles từ response (ưu tiên roles trong data.result, nếu không có thì lấy từ data.roles hoặc user trong localStorage)
+      let roles = [];
+      if (Array.isArray(data.result?.roles)) {
+        roles = data.result.roles;
+      } else if (Array.isArray(data.roles)) {
+        roles = data.roles;
+      } else {
+        if (user && Array.isArray(user.roles)) {
+          roles = user.roles;
+        }
+      }
+      console.log('Login redirect debug:', { data, roles });
+      if (roles.includes('ROLE_ADMIN')) {
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     },
     onError: (error) => {
       console.error('Login error details:', {

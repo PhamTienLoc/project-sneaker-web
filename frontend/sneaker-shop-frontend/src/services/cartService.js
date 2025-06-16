@@ -65,9 +65,7 @@ class CartService {
       if (!authService.isAuthenticated()) {
         throw new Error('User must be logged in to update cart')
       }
-      const response = await api.put(`/carts/items/${cartItemId}`, {
-        quantity: Number(quantity)
-      })
+      const response = await api.put(`/carts/items/${cartItemId}?quantity=${quantity}`)
       return response.data
     } catch (error) {
       console.error('Error updating cart item:', error)

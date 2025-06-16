@@ -2,6 +2,22 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { imageService } from '../services/imageService'
 
+// Mapping tên màu sang mã màu
+const COLOR_MAP = {
+  'Đen': '#000000',
+  'Trắng': '#ffffff',
+  'Xám': '#808080',
+  'Đỏ': '#ff0000',
+  'Xanh': '#008000',
+  'Vàng': '#ffff00',
+  'Hồng': '#ff69b4',
+  'Tím': '#800080',
+  'Cam': '#ffa500',
+  'Nâu': '#8b4513',
+  'Xanh lá': '#00ff00',
+  'Xanh dương': '#0000ff'
+}
+
 const ProductCard = ({ product }) => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -33,7 +49,7 @@ const ProductCard = ({ product }) => {
       <div className="p-4">
         <div className="mb-2">
           <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {product.name}
+              {product.name}
           </h3>
           {product.brand && (
             <p className="text-sm text-gray-500 mt-1">{product.brand.name}</p>
@@ -51,7 +67,7 @@ const ProductCard = ({ product }) => {
                 <div
                   key={index}
                   className="w-4 h-4 rounded-full border border-gray-300"
-                  style={{ backgroundColor: color.toLowerCase() }}
+                  style={{ backgroundColor: COLOR_MAP[color] || '#fff' }}
                   title={color}
                 />
               ))}

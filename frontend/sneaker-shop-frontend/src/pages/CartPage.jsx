@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react'
 import { cartService } from '../services/cartService'
 import { imageService } from '../services/imageService'
@@ -11,6 +11,7 @@ console.log('CartPage mounted');
 
 const CartPage = () => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const { data: cartData, isLoading, error } = useQuery({
     queryKey: ['cart'],
@@ -186,6 +187,7 @@ const CartPage = () => {
               <button
                 className="mt-4 w-full bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700"
                 disabled={cartItems.length === 0}
+                onClick={() => navigate('/order')}
               >
                 Thanh toán
               </button>
