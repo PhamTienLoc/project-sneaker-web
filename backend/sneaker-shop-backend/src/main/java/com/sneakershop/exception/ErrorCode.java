@@ -8,12 +8,18 @@ public enum ErrorCode {
     // Auth/User: 1100–1199
     USER_EXISTED(1100, "User already exists"),
     USER_NOT_FOUND(1101, "User not found"),
-    INVALID_USERNAME(1102, "Username must be at least 5 characters"),
-    INVALID_PASSWORD(1103, "Password must be at least 8 characters"),
+    INVALID_USERNAME(1102, "Username phải từ 3-50 ký tự"),
+    INVALID_PASSWORD(1103, "Password phải có ít nhất 6 ký tự"),
     USER_NOT_EXISTED(1104, "User not exists"),
     UNAUTHENTICATED(1105, "Unauthenticated"),
     EMAIL_EXISTED(1106, "Email already exists"),
     ROLE_NOT_FOUND(1107, "Role not found"),
+    USERNAME_REQUIRED(1108, "Username không được để trống"),
+    FIRSTNAME_REQUIRED(1109, "Họ không được để trống"),
+    LASTNAME_REQUIRED(1110, "Tên không được để trống"),
+    ADDRESS_REQUIRED(1111, "Địa chỉ không được để trống"),
+    INVALID_PHONE_NUMBER(1112, "Số điện thoại phải có 10 chữ số"),
+    PASSWORD_REQUIRED(1113, "Password không được để trống"),
 
     // Product: 1200–1299
     PRODUCT_NOT_FOUND(1200, "Product not found"),

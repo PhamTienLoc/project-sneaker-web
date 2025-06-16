@@ -71,7 +71,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.anyRequest().permitAll()
+                        auth
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/products/**").permitAll()
+                                .requestMatchers("/categories/**").permitAll()
+                                .requestMatchers("/brands/**").permitAll()
+                                .requestMatchers("/images/**").permitAll()
+                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
