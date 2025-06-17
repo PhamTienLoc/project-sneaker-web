@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/brands")
@@ -23,6 +23,7 @@ public class BrandController {
     BrandService brandService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<BrandResponse> createBrand(@Valid @RequestBody BrandCreateRequest request) {
         return ApiResponse.<BrandResponse>builder()
                 .message("Tạo thương hiệu thành công")
@@ -45,6 +46,7 @@ public class BrandController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<BrandResponse> updateBrand(@PathVariable Long id, @Valid @RequestBody BrandUpdateRequest request) {
         return ApiResponse.<BrandResponse>builder()
                 .message("Cập nhật thương hiệu thành công")
@@ -53,6 +55,7 @@ public class BrandController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Void> deleteBrand(@PathVariable Long id) {
         brandService.deleteBrand(id);
         return ApiResponse.<Void>builder()
