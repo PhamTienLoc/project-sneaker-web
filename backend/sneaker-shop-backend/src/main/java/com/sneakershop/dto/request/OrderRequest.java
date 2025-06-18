@@ -1,6 +1,6 @@
 package com.sneakershop.dto.request;
 
-import com.sneakershop.entity.PaymentStatus;
+import com.sneakershop.constant.PaymentStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

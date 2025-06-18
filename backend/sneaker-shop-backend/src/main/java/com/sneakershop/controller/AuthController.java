@@ -4,6 +4,7 @@ import com.sneakershop.dto.request.LoginRequest;
 import com.sneakershop.dto.request.RegisterRequest;
 import com.sneakershop.dto.response.ApiResponse;
 import com.sneakershop.dto.response.JwtResponse;
+import com.sneakershop.entity.Role;
 import com.sneakershop.entity.User;
 import com.sneakershop.security.JwtTokenProvider;
 import com.sneakershop.service.UserService;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -40,7 +41,7 @@ public class AuthController {
 
         User user = userService.findByUsername(loginRequest.getUsername());
         List<String> roles = user.getRoles().stream()
-                .map(role -> role.getName())
+                .map(Role::getName)
                 .collect(Collectors.toList());
 
         return ApiResponse.<JwtResponse>builder()
@@ -50,7 +51,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<Void> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        User user = userService.register(registerRequest);
+        userService.register(registerRequest);
         return ApiResponse.<Void>builder()
                 .message("Đăng ký thành công")
                 .build();

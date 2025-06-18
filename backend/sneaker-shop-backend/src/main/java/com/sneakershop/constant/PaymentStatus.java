@@ -1,4 +1,4 @@
-package com.sneakershop.entity;
+package com.sneakershop.constant;
 
 public enum PaymentStatus {
     PENDING,

@@ -108,15 +108,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponse updateOrder(Long userId, Long orderId, OrderUpdateRequest request) {
+    public OrderResponse updateOrder(Long orderId, OrderUpdateRequest request) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-        
-        // Verify the order belongs to the user
-        if (!order.getUser().getId().equals(userId)) {
-            throw new AppException(ErrorCode.ORDER_NOT_FOUND);
-        }
-        
+
         orderMapper.updateOrder(order, request);
         return orderMapper.toResponse(orderRepository.save(order));
     }
@@ -132,15 +127,5 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
-    }
-
-    @Override
-    @Transactional
-    public OrderResponse updateOrder(Long orderId, OrderUpdateRequest request) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-        
-        orderMapper.updateOrder(order, request);
-        return orderMapper.toResponse(orderRepository.save(order));
     }
 }

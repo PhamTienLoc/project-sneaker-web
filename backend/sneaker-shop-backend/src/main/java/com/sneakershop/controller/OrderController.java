@@ -60,12 +60,13 @@ public class OrderController {
                 .build();
     }
 
-    @PutMapping("/{orderId}/status")
+    @PutMapping("/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<OrderResponse> updateOrderStatus(@PathVariable Long orderId, @RequestParam String status) {
+    public ApiResponse<OrderResponse> updateOrder(
+            @PathVariable Long orderId,
+            @Valid @RequestBody OrderUpdateRequest request) {
         return ApiResponse.<OrderResponse>builder()
-                .message("Cập nhật trạng thái đơn hàng thành công")
-                .result(orderService.updateOrderStatus(orderId, status))
+                .result(orderService.updateOrder(orderId, request))
                 .build();
     }
 
@@ -75,16 +76,6 @@ public class OrderController {
         orderService.cancelOrder(user.getId(), orderId);
         return ApiResponse.<Void>builder()
                 .message("Hủy đơn hàng thành công")
-                .build();
-    }
-
-    @PutMapping("/{orderId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<OrderResponse> updateOrder(
-            @PathVariable Long orderId,
-            @Valid @RequestBody OrderUpdateRequest request) {
-        return ApiResponse.<OrderResponse>builder()
-                .result(orderService.updateOrder(orderId, request))
                 .build();
     }
 }
