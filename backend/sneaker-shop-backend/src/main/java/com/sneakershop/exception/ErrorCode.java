@@ -4,6 +4,7 @@ public enum ErrorCode {
     // Common: 1000–1099
     UNCATEGORIZED_EXCEPTION(1000, "Uncategorized exception"),
     INVALID_KEY(1001, "Invalid message key"),
+    INVALID_REQUEST(1002, "Invalid request"),
 
     // Auth/User: 1100–1199
     USER_EXISTED(1100, "User already exists"),

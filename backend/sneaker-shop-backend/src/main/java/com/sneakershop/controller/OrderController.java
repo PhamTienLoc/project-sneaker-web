@@ -1,6 +1,7 @@
 package com.sneakershop.controller;
 
 import com.sneakershop.dto.request.OrderRequest;
+import com.sneakershop.dto.request.OrderUpdateRequest;
 import com.sneakershop.dto.response.ApiResponse;
 import com.sneakershop.dto.response.OrderResponse;
 import com.sneakershop.entity.User;
@@ -25,9 +26,7 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping
-    public ApiResponse<OrderResponse> createOrder(
-            Authentication authentication,
-            @Valid @RequestBody OrderRequest request) {
+    public ApiResponse<OrderResponse> createOrder(Authentication authentication, @Valid @RequestBody OrderRequest request) {
         User user = (User) authentication.getPrincipal();
         return ApiResponse.<OrderResponse>builder()
                 .message("Tạo đơn hàng thành công")
@@ -59,12 +58,11 @@ public class OrderController {
                 .build();
     }
 
-    @PutMapping("/{orderId}/status")
+    @PutMapping("/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<OrderResponse> updateOrderStatus(@PathVariable Long orderId, @RequestParam String status) {
+    public ApiResponse<OrderResponse> updateOrder(@PathVariable Long orderId, @Valid @RequestBody OrderUpdateRequest request) {
         return ApiResponse.<OrderResponse>builder()
-                .message("Cập nhật trạng thái đơn hàng thành công")
-                .result(orderService.updateOrderStatus(orderId, status))
+                .result(orderService.updateOrder(orderId, request))
                 .build();
     }
 

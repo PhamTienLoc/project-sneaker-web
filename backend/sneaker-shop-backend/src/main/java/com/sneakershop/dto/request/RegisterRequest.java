@@ -2,30 +2,31 @@ package com.sneakershop.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class RegisterRequest {
-    @NotBlank
-    @Size(min = 3, max = 50)
+    @NotBlank(message = "USERNAME_REQUIRED")
+    @Size(min = 3, max = 50, message = "INVALID_USERNAME")
     private String username;
 
-    @NotBlank
-    @Size(max = 100)
-    @Email
+    @NotBlank(message = "EMAIL_REQUIRED")
+    @Email(message = "INVALID_EMAIL_FORMAT")
     private String email;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @NotBlank(message = "PASSWORD_REQUIRED")
+    @Size(min = 6, max = 40, message = "INVALID_PASSWORD")
     private String password;
 
-    @Size(max = 50)
-    private String firstName;
+    @NotBlank(message = "FIRSTNAME_REQUIRED")
+    String firstName;
 
-    @Size(max = 50)
-    private String lastName;
+    @NotBlank(message = "LASTNAME_REQUIRED")
+    String lastName;
 
+    @Pattern(regexp = "^\\d{10}$", message = "INVALID_PHONE_NUMBER")
     private String phoneNumber;
 
     private String address;

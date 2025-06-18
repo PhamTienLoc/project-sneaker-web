@@ -17,7 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +43,11 @@ public class BrandServiceImpl implements BrandService {
         Brand brand = brandRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_FOUND));
 
         BrandResponse response = brandMapper.toBrandResponse(brand);
-
-        response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+        try {
+            response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+        } catch (AppException e) {
+            response.setImages(new ArrayList<>());
+        }
 
         return response;
     }
@@ -53,7 +56,11 @@ public class BrandServiceImpl implements BrandService {
     public Page<BrandResponse> getAllBrands(Pageable pageable) {
         return brandRepository.findAll(pageable).map(brand -> {
             BrandResponse response = brandMapper.toBrandResponse(brand);
-            response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+            try {
+                response.setImages(imageService.getImagesByObject("brand", brand.getId()));
+            } catch (AppException e) {
+                response.setImages(new ArrayList<>());
+            }
             return response;
         });
     }

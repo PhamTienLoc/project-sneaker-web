@@ -26,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +56,6 @@ public class ProductServiceImpl implements ProductService {
         product = productRepository.save(product);
 
         ProductResponse response = productMapper.toProductResponse(product);
-        response.setImages(imageService.getImagesByObject("product", product.getId()));
         response.setCategories(categoryRepository.findAllById(request.getCategoryIds()).stream()
                 .map(category -> CategoryResponse.builder()
                         .id(category.getId())
@@ -70,44 +70,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(Long id, ProductUpdateRequest request) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-
-        if (request.getBrandId() != null) {
-            Brand brand = brandRepository.findById(request.getBrandId()).orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_FOUND));
-            product.setBrand(brand);
-        }
-
-        if (request.getCategoryIds() != null) {
-            product.setCategoryIds(new HashSet<>(request.getCategoryIds())); // <== THÊM DÒNG NÀY
-        }
-
-        productMapper.updateProduct(request, product);
-
-        product = productRepository.save(product);
-        ProductResponse response = productMapper.toProductResponse(product);
-        response.setImages(imageService.getImagesByObject("product", product.getId()));
-        if (request.getCategoryIds() != null) {
-            response.setCategories(categoryRepository.findAllById(request.getCategoryIds()).stream()
-                    .map(category -> CategoryResponse.builder()
-                            .id(category.getId())
-                            .name(category.getName())
-                            .description(category.getDescription())
-                            .createdAt(category.getCreatedAt())
-                            .updatedAt(category.getUpdatedAt())
-                            .isActive(category.getIsActive())
-                            .build())
-                    .toList());
-        }
-        return response;
-    }
-
-    @Override
     public ProductResponse getProductById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         ProductResponse response = productMapper.toProductResponse(product);
-        response.setImages(imageService.getImagesByObject("product", product.getId()));
+        try {
+            response.setImages(imageService.getImagesByObject("product", product.getId()));
+        } catch (AppException e) {
+            response.setImages(new ArrayList<>());
+        }
         response.setCategories(categoryRepository.findAllByProductId(product.getId()).stream()
                 .map(category -> CategoryResponse.builder()
                         .id(category.getId())
@@ -125,7 +96,11 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable).map(product -> {
             ProductResponse response = productMapper.toProductResponse(product);
-            response.setImages(imageService.getImagesByObject("product", product.getId()));
+            try {
+                response.setImages(imageService.getImagesByObject("product", product.getId()));
+            } catch (AppException e) {
+                response.setImages(new ArrayList<>());
+            }
             response.setCategories(categoryRepository.findAllByProductId(product.getId()).stream()
                     .map(category -> CategoryResponse.builder()
                             .id(category.getId())
@@ -154,9 +129,11 @@ public class ProductServiceImpl implements ProductService {
 
         return productPage.map(product -> {
             ProductResponse response = productMapper.toProductResponse(product);
-
-            response.setImages(imageService.getImagesByObject("product", product.getId()));
-
+            try {
+                response.setImages(imageService.getImagesByObject("product", product.getId()));
+            } catch (AppException e) {
+                response.setImages(new ArrayList<>());
+            }
             response.setCategories(categoryRepository.findAllByProductId(product.getId()).stream()
                     .map(category -> CategoryResponse.builder()
                             .id(category.getId())
@@ -169,6 +146,41 @@ public class ProductServiceImpl implements ProductService {
                     .toList());
             return response;
         });
+    }
+
+    @Override
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest request) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        if (request.getBrandId() != null) {
+            Brand brand = brandRepository.findById(request.getBrandId()).orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_FOUND));
+            product.setBrand(brand);
+        }
+
+        if (request.getCategoryIds() != null) {
+            product.setCategoryIds(new HashSet<>(request.getCategoryIds()));
+        }
+
+        productMapper.updateProduct(request, product);
+        product = productRepository.save(product);
+
+        ProductResponse response = productMapper.toProductResponse(product);
+        try {
+            response.setImages(imageService.getImagesByObject("product", product.getId()));
+        } catch (AppException e) {
+            response.setImages(new ArrayList<>());
+        }
+        response.setCategories(categoryRepository.findAllByProductId(product.getId()).stream()
+                .map(category -> CategoryResponse.builder()
+                        .id(category.getId())
+                        .name(category.getName())
+                        .description(category.getDescription())
+                        .createdAt(category.getCreatedAt())
+                        .updatedAt(category.getUpdatedAt())
+                        .isActive(category.getIsActive())
+                        .build())
+                .toList());
+        return response;
     }
 
     @Override

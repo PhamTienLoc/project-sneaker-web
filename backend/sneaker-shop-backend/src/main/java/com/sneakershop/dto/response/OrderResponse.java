@@ -11,6 +11,7 @@ import com.sneakershop.constant.OrderStatus;
 @Data
 public class OrderResponse {
     private Long id;
+    private UserResponse user;
     private List<OrderItemResponse> items;
     private BigDecimal totalAmount;
     private String shippingAddress;
