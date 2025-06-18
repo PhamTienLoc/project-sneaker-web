@@ -70,10 +70,20 @@ public class OrderController {
                 .build();
     }
 
-    @PostMapping("/{orderId}/cancel")
-    public ApiResponse<Void> cancelOrder(Authentication authentication, @PathVariable Long orderId) {
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/me/{orderId}/cancel")
+    public ApiResponse<Void> cancelMyOrder(Authentication authentication, @PathVariable Long orderId) {
         User user = (User) authentication.getPrincipal();
         orderService.cancelOrder(user.getId(), orderId);
+        return ApiResponse.<Void>builder()
+                .message("Hủy đơn hàng thành công")
+                .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{orderId}/cancel")
+    public ApiResponse<Void> cancelOrder(@PathVariable Long orderId) {
+        orderService.adminCancelOrder(orderId);
         return ApiResponse.<Void>builder()
                 .message("Hủy đơn hàng thành công")
                 .build();

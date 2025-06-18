@@ -13,4 +13,5 @@ public interface OrderService {
     Page<OrderResponse> getAllOrders(Pageable pageable);
     OrderResponse updateOrder(Long userId, OrderUpdateRequest request);
     void cancelOrder(Long userId, Long orderId);
+    void adminCancelOrder(Long orderId);
 } 

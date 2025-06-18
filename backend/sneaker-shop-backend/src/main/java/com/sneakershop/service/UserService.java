@@ -1,5 +1,6 @@
 package com.sneakershop.service;
 
+import com.sneakershop.dto.request.ChangePasswordRequest;
 import com.sneakershop.dto.request.RegisterRequest;
 import com.sneakershop.dto.request.UserCreateRequest;
 import com.sneakershop.dto.request.UserUpdateRequest;
@@ -20,4 +21,5 @@ public interface UserService {
     UserResponse getUserById(Long id);
     void deleteUser(Long id);
     UserResponse createUser(UserCreateRequest request);
+    void changePassword(Long userId, ChangePasswordRequest request);
 }

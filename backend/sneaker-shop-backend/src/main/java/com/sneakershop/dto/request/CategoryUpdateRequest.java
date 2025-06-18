@@ -10,7 +10,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryUpdateRequest {
+    @NotBlank(message = "CATEGORY_NAME_BLANK")
     String name;
+
     String description;
     Boolean isActive;
 }

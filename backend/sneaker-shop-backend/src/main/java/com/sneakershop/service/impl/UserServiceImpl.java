@@ -1,6 +1,7 @@
 package com.sneakershop.service.impl;
 
 import com.sneakershop.constant.RoleType;
+import com.sneakershop.dto.request.ChangePasswordRequest;
 import com.sneakershop.dto.request.RegisterRequest;
 import com.sneakershop.dto.request.UserCreateRequest;
 import com.sneakershop.dto.request.UserUpdateRequest;
@@ -147,5 +148,23 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND))));
 
         return userMapper.toResponse(userRepository.save(user));
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_OLD_PASSWORD);
+        }
+
+        if (request.getOldPassword().equals(request.getNewPassword())) {
+            throw new AppException(ErrorCode.NEW_PASSWORD_MUST_BE_DIFFERENT);
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 } 

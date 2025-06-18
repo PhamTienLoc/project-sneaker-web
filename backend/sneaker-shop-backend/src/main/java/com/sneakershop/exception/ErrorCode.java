@@ -21,6 +21,9 @@ public enum ErrorCode {
     ADDRESS_REQUIRED(1111, "Địa chỉ không được để trống"),
     INVALID_PHONE_NUMBER(1112, "Số điện thoại phải có 10 chữ số"),
     PASSWORD_REQUIRED(1113, "Password không được để trống"),
+    INVALID_OLD_PASSWORD(1114, "Mật khẩu cũ không đúng"),
+    INVALID_NEW_PASSWORD(1115, "Mật khẩu mới không đúng"),
+    NEW_PASSWORD_MUST_BE_DIFFERENT(1116, "Mật khẩu mới phải khác mật khẩu cũ"),
 
     // Product: 1200–1299
     PRODUCT_NOT_FOUND(1200, "Product not found"),

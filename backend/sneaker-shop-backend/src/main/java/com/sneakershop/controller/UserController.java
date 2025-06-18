@@ -1,5 +1,6 @@
 package com.sneakershop.controller;
 
+import com.sneakershop.dto.request.ChangePasswordRequest;
 import com.sneakershop.dto.request.UserCreateRequest;
 import com.sneakershop.dto.request.UserUpdateRequest;
 import com.sneakershop.dto.response.ApiResponse;
@@ -41,6 +42,29 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .message("Cập nhật thông tin thành công")
                 .result(userService.updateUser(user.getId(), request))
+                .build();
+    }
+
+    @PutMapping("/me/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<Void> changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request) {
+        User user = (User) authentication.getPrincipal();
+        userService.changePassword(user.getId(), request);
+        return ApiResponse.<Void>builder()
+                .message("Đổi mật khẩu thành công")
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<UserResponse> updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UserUpdateRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .message("Cập nhật thông tin người dùng thành công")
+                .result(userService.updateUser(id, request))
                 .build();
     }
 
