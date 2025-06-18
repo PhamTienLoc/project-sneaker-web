@@ -31,7 +31,7 @@ public class CartServiceImpl implements CartService {
     CartMapper cartMapper;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse getCart(Long userId) {
         Cart cart = getOrCreateCart(userId);
         return cartMapper.toResponse(cart);
@@ -74,7 +74,6 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartResponse updateItem(Long userId, Long itemId, Integer quantity) {
         Cart cart = getOrCreateCart(userId);
-
         CartItem item = cartItemRepository.findById(itemId).orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
 
         if (!item.getCart().getId().equals(cart.getId())) {
@@ -83,6 +82,7 @@ public class CartServiceImpl implements CartService {
 
         item.setQuantity(quantity);
         cartItemRepository.save(item);
+
         return cartMapper.toResponse(cart);
     }
 

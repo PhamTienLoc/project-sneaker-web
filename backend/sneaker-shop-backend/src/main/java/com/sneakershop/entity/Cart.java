@@ -25,7 +25,6 @@ public class Cart extends BaseEntity {
     User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("id ASC")
     Set<CartItem> items = new HashSet<>();
 
     public void addItem(CartItem item) {
@@ -41,4 +40,4 @@ public class Cart extends BaseEntity {
     public void clear() {
         items.clear();
     }
-}
+} 

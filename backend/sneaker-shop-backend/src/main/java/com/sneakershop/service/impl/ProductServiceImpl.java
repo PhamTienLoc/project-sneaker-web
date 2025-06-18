@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
 
         ProductResponse response = productMapper.toProductResponse(product);
         try {
-            response.setImages(imageService.getImagesByObject("product", product.getId()));
+        response.setImages(imageService.getImagesByObject("product", product.getId()));
         } catch (AppException e) {
             response.setImages(new ArrayList<>());
         }
@@ -97,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageable).map(product -> {
             ProductResponse response = productMapper.toProductResponse(product);
             try {
-                response.setImages(imageService.getImagesByObject("product", product.getId()));
+            response.setImages(imageService.getImagesByObject("product", product.getId()));
             } catch (AppException e) {
                 response.setImages(new ArrayList<>());
             }
@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
         return productPage.map(product -> {
             ProductResponse response = productMapper.toProductResponse(product);
             try {
-                response.setImages(imageService.getImagesByObject("product", product.getId()));
+            response.setImages(imageService.getImagesByObject("product", product.getId()));
             } catch (AppException e) {
                 response.setImages(new ArrayList<>());
             }

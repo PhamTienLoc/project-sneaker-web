@@ -38,4 +38,4 @@ public interface UserMapper {
                 .map(role -> role.getName())
                 .collect(Collectors.toList());
     }
-}
+} 

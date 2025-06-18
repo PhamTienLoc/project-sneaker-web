@@ -18,4 +18,4 @@ public class OrderItemResponse {
     private ImageResponse image;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-}
+} 

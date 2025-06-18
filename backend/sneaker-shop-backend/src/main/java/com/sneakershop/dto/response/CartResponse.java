@@ -10,4 +10,4 @@ public class CartResponse {
     private List<CartItemResponse> items;
     private Double totalAmount;
     private Integer totalItems;
-}
+} 

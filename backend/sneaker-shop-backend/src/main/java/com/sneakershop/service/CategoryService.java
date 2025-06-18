@@ -6,6 +6,7 @@ import com.sneakershop.dto.response.CategoryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 public interface CategoryService {
 
     CategoryResponse createCategory(CategoryCreateRequest request);

@@ -9,4 +9,4 @@ public interface CartService {
     CartResponse updateItem(Long userId, Long itemId, Integer quantity);
     CartResponse removeItem(Long userId, Long itemId);
     void clearCart(Long userId);
-}
+} 

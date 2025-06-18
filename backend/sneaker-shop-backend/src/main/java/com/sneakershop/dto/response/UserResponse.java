@@ -20,4 +20,4 @@ public class UserResponse {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     Boolean isActive;
-}
+} 

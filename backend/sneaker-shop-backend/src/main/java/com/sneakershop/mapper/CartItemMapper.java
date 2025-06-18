@@ -3,7 +3,6 @@ package com.sneakershop.mapper;
 import com.sneakershop.dto.response.CartItemResponse;
 import com.sneakershop.dto.response.ImageResponse;
 import com.sneakershop.entity.CartItem;
-import com.sneakershop.entity.Product;
 import com.sneakershop.service.ImageService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,7 +23,7 @@ public abstract class CartItemMapper {
     public abstract CartItemResponse toResponse(CartItem item);
 
     @Named("getFirstImage")
-    protected ImageResponse getFirstImage(Product product) {
+    protected ImageResponse getFirstImage(com.sneakershop.entity.Product product) {
         if (product == null) {
             return null;
         }
@@ -35,4 +34,4 @@ public abstract class CartItemMapper {
             return null;
         }
     }
-}
+} 

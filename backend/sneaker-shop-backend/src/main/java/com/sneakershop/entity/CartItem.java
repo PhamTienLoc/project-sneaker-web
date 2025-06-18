@@ -36,4 +36,4 @@ public class CartItem extends BaseEntity {
 
     @Column(nullable = false)
     Double price;
-}
+} 

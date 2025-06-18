@@ -1,6 +1,7 @@
 package com.sneakershop.controller;
 
 import com.sneakershop.dto.request.OrderRequest;
+import com.sneakershop.dto.request.OrderUpdateRequest;
 import com.sneakershop.dto.response.ApiResponse;
 import com.sneakershop.dto.response.OrderResponse;
 import com.sneakershop.entity.User;
@@ -74,6 +75,16 @@ public class OrderController {
         orderService.cancelOrder(user.getId(), orderId);
         return ApiResponse.<Void>builder()
                 .message("Hủy đơn hàng thành công")
+                .build();
+    }
+
+    @PutMapping("/{orderId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<OrderResponse> updateOrder(
+            @PathVariable Long orderId,
+            @Valid @RequestBody OrderUpdateRequest request) {
+        return ApiResponse.<OrderResponse>builder()
+                .result(orderService.updateOrder(orderId, request))
                 .build();
     }
 }

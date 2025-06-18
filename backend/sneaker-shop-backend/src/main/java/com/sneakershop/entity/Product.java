@@ -21,10 +21,10 @@ public class Product extends BaseEntity {
     Long id;
 
     String name;
-
+    
     @Column(columnDefinition = "TEXT")
     String description;
-
+    
     BigDecimal price;
 
     @ElementCollection

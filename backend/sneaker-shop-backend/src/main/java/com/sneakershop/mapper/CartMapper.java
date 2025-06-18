@@ -12,10 +12,14 @@ public interface CartMapper {
     CartResponse toResponse(Cart cart);
 
     default Double calculateTotalAmount(Cart cart) {
-        return cart.getItems().stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        return cart.getItems().stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
     }
 
     default Integer calculateTotalItems(Cart cart) {
-        return cart.getItems().stream().mapToInt(item -> item.getQuantity()).sum();
+        return cart.getItems().stream()
+                .mapToInt(item -> item.getQuantity())
+                .sum();
     }
-}
+} 

@@ -6,6 +6,7 @@ import com.sneakershop.dto.response.BrandResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 public interface BrandService {
     BrandResponse createBrand(BrandCreateRequest request);
 

@@ -19,10 +19,10 @@ public class Brand extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-
+    
     @Column(columnDefinition = "TEXT")
     String description;
-
+    
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
     Set<Product> products;
 }

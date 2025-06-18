@@ -19,4 +19,4 @@ public class CartItemResponse {
     private Double price;
     private Double subtotal;
     private ImageResponse image;
-}
+} 

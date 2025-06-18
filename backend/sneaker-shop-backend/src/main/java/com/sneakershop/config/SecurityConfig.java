@@ -67,22 +67,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/products/**").permitAll()
-                                .requestMatchers("/categories/**").permitAll()
-                                .requestMatchers("/brands/**").permitAll()
-                                .requestMatchers("/images/**").permitAll()
-                                .anyRequest().authenticated()
-                );
-
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> 
+                auth
+                    .requestMatchers("/auth/register", "/auth/login", "/error").permitAll()
+                    .requestMatchers("/products/**").permitAll()
+                    .requestMatchers("/categories/**").permitAll()
+                    .requestMatchers("/brands/**").permitAll()
+                    .requestMatchers("/images/download/**").permitAll()
+                    .requestMatchers("/images").permitAll()
+                    .requestMatchers("/images/upload").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+            );
+        
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+        
         return http.build();
     }
 }

@@ -7,11 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -43,4 +40,4 @@ public class OrderItem extends BaseEntity {
 
     @Column(nullable = false)
     BigDecimal price;
-}
+} 

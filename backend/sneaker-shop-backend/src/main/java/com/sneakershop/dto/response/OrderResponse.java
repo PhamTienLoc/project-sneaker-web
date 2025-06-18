@@ -11,6 +11,7 @@ import com.sneakershop.constant.OrderStatus;
 @Data
 public class OrderResponse {
     private Long id;
+    private UserResponse user;
     private List<OrderItemResponse> items;
     private BigDecimal totalAmount;
     private String shippingAddress;
@@ -22,4 +23,4 @@ public class OrderResponse {
     private String note;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-}
+} 

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
