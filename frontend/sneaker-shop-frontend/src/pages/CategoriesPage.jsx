@@ -53,10 +53,12 @@ const CategoriesPage = () => {
         <LoadingSpinner size="lg" className="py-12" />
       ) : categoriesData?.result?.content?.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-            {categoriesData.result.content.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+              {categoriesData.result.content.map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
           </div>
 
           {/* Pagination */}

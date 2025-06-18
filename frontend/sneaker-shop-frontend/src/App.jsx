@@ -21,6 +21,9 @@ import AdminCategoryPage from './pages/admin/AdminCategoryPage'
 import AdminBrandPage from './pages/admin/AdminBrandPage'
 import AdminOrderPage from './pages/admin/AdminOrderPage'
 import AdminUserPage from './pages/admin/AdminUserPage'
+import ProfilePage from './pages/ProfilePage'
+import ChangePasswordPage from './pages/ChangePasswordPage'
+import OrderHistoryPage from './pages/OrderHistoryPage'
 
 function App() {
   return (
@@ -41,6 +44,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route path="/order-history" element={<OrderHistoryPage />} />
           <Route path="/admin" element={
             <RequireAdmin>
               <AdminLayout />

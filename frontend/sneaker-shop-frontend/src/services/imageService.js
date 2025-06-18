@@ -8,6 +8,6 @@ export const imageService = {
 
   // Get image download URL
   getImageUrl: (path) => {
-    return `/api/images/download?path=${encodeURIComponent(path)}`
+    return `http://localhost:8080/api/images/download?path=${encodeURIComponent(path)}`
   },
 }

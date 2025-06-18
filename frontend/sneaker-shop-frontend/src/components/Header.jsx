@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search, Menu, X, ShoppingBag, User } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
@@ -18,6 +18,28 @@ const Header = () => {
   const isAuthenticated = authService.isAuthenticated()
   const currentUser = authService.getCurrentUser()
 
+  const user = JSON.parse(localStorage.getItem('user'))
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const avatarLetter = user?.firstName?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || '?'
+
+  const dropdownRef = useRef()
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [dropdownOpen])
+
   const handleSearch = (e) => {
     e.preventDefault()
     if (searchQuery.trim()) {
@@ -36,6 +58,12 @@ const Header = () => {
   const handleLogout = () => {
     authService.logout()
     window.location.reload()
+  }
+
+  const handleDropdown = () => setDropdownOpen((prev) => !prev)
+  const handleNavigate = (path) => {
+    setDropdownOpen(false)
+    navigate(path)
   }
 
   return (
@@ -92,16 +120,43 @@ const Header = () => {
               )}
             </Link>
             {isAuthenticated ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-600">
-                  Xin chào, {currentUser?.firstName || currentUser?.username}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-600 hover:text-primary-600"
+              <div className="relative" ref={dropdownRef}>
+                <div
+                  className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold cursor-pointer select-none"
+                  onClick={handleDropdown}
                 >
-                  Đăng xuất
-                </button>
+                  {avatarLetter}
+                </div>
+                {dropdownOpen && (
+                  <div
+                    className="absolute right-0 mt-2 w-56 bg-white rounded shadow-lg z-50 border"
+                  >
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                      onClick={() => handleNavigate('/profile')}
+                    >
+                      Thông tin cá nhân
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                      onClick={() => handleNavigate('/change-password')}
+                    >
+                      Thay đổi mật khẩu
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                      onClick={() => handleNavigate('/order-history')}
+                    >
+                      Lịch sử mua hàng
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 border-t"
+                      onClick={handleLogout}
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center space-x-4">

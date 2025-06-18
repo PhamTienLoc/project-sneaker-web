@@ -137,7 +137,6 @@ const ProductsPage = () => {
     'Nâu': '#8b4513',
     'Xanh lá': '#00ff00',
     'Xanh dương': '#0000ff',
-    'white': '#ffffff'
   }
   const availableSizes = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
 

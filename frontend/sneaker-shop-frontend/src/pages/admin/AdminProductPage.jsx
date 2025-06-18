@@ -5,7 +5,8 @@ import { adminBrandService } from "../../services/adminBrandService";
 import { adminCategoryService } from "../../services/adminCategoryService";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from "../../services/api";
+import { imageService } from "../../services/imageService";
 
 export default function AdminProductPage() {
   const queryClient = useQueryClient();
@@ -18,6 +19,18 @@ export default function AdminProductPage() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    brandId: '',
+    categoryIds: [],
+    images: [],
+    isActive: true
+  });
+  const [imagePreview, setImagePreview] = useState(null);
+  const [editing, setEditing] = useState(null);
 
   // Lấy danh sách sản phẩm
   const { data = [], isLoading } = useQuery({
@@ -79,14 +92,29 @@ export default function AdminProductPage() {
         if (imageFile && productId) {
           try {
             console.log('Uploading image for product:', productId);
-            await adminProductService.uploadImage(productId, imageFile);
-            console.log('Image uploaded successfully');
+            const form = new FormData();
+            form.append("files", imageFile);
+            form.append("type", "product");
+            form.append("objectId", productId);
+            console.log('FormData contents:', {
+              file: imageFile,
+              type: "product",
+              objectId: productId
+            });
+            const response = await api.post("/images/upload", form, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
+              },
+            });
+            console.log('Image upload response:', response.data);
           } catch (error) {
             console.error('Error uploading image:', {
               error,
               response: error.response?.data,
               status: error.response?.status,
-              headers: error.response?.headers
+              headers: error.response?.headers,
+              request: error.request
             });
             toast.error('Lỗi upload ảnh: ' + (error.response?.data?.message || error.message || 'Không xác định'));
             throw error;
@@ -127,41 +155,12 @@ export default function AdminProductPage() {
     },
   });
 
-  // Sửa sản phẩm
+  // Define all possible sizes
+  const ALL_SIZES = ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
+
   const mutationUpdate = useMutation({
-    mutationFn: async ({ id, data, imageFile }) => {
-      try {
-        // 1. Upload ảnh mới nếu có (vì đã có id)
-        if (imageFile) {
-          try {
-            console.log('Uploading image for product:', id);
-            await adminProductService.uploadImage(id, imageFile);
-            console.log('Image uploaded successfully');
-          } catch (error) {
-            console.error('Error uploading image:', {
-              error,
-              response: error.response?.data,
-              status: error.response?.status,
-              headers: error.response?.headers
-            });
-            toast.error('Lỗi upload ảnh: ' + (error.response?.data?.message || error.message || 'Không xác định'));
-            throw error;
-          }
-        }
-        
-        // 2. Update sản phẩm
-        console.log('Updating product:', { id, data });
-        await adminProductService.update(id, data);
-        console.log('Product updated successfully');
-      } catch (error) {
-        console.error('Error in update mutation:', {
-          error,
-          response: error.response?.data,
-          status: error.response?.status,
-          headers: error.response?.headers
-        });
-        throw error;
-      }
+    mutationFn: async ({ id, data }) => {
+      return await adminProductService.update(id, data);
     },
     onSuccess: () => {
       toast.success("Cập nhật sản phẩm thành công!");
@@ -176,17 +175,11 @@ export default function AdminProductPage() {
       setSelectedBrand("");
     },
     onError: (error) => {
-      console.error('Error updating product:', {
-        error,
-        response: error.response?.data,
-        status: error.response?.status,
-        headers: error.response?.headers
-      });
       toast.error("Cập nhật sản phẩm thất bại: " + (error.response?.data?.message || error.message || 'Không xác định'));
     },
   });
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, getValues } = useForm();
 
   // Xử lý chọn size
   const handleSelectSize = (e) => {
@@ -211,7 +204,11 @@ export default function AdminProductPage() {
   // Mở form thêm mới
   const openAdd = () => {
     setEditingProduct(null);
-    reset();
+    reset({
+      name: '',
+      description: '',
+      price: ''
+    });
     setSelectedBrand("");
     setSelectedSizes([]);
     setColors([]);
@@ -222,43 +219,138 @@ export default function AdminProductPage() {
 
   // Mở form sửa
   const openEdit = (product) => {
-    setEditingProduct(product);
+    setEditing(product);
     reset({
       name: product.name,
-      description: product.description,
+      description: product.description || '',
       price: product.price,
+      stock: product.stock,
+      isActive: product.isActive
     });
     setSelectedBrand(product.brand?.id || "");
+    setSelectedCategories(product.categories?.map(c => String(c.id)) || []);
     setSelectedSizes(product.sizes || []);
     setColors(product.colors || []);
-    setSelectedCategories(product.categories?.map(c => String(c.id)) || []);
-    setImageFile(null);
+    if (product.images && product.images.length > 0) {
+      setImagePreview(imageService.getImageUrl(product.images[0].path));
+    } else {
+      setImagePreview(null);
+    }
     setShowForm(true);
   };
 
-  // Xử lý submit form
-  const onSubmit = (formData) => {
-    if (editingProduct) {
-      mutationUpdate.mutate({
-        id: editingProduct.id,
-        data: {
-          ...formData,
-          brandId: selectedBrand,
-          sizes: selectedSizes,
-          colors,
-          categoryIds: selectedCategories,
-        },
-        imageFile,
-      });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setFormData(prev => ({
+        ...prev,
+        images: [file]
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
-      mutationCreate.mutate({
-        ...formData,
-        brandId: selectedBrand,
-        sizes: selectedSizes,
-        colors,
-        categoryIds: selectedCategories,
-        imageFile,
-      });
+      setImageFile(null);
+      setImagePreview(null);
+      setFormData(prev => ({
+        ...prev,
+        images: []
+      }));
+    }
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditing(null);
+    reset({
+      name: '',
+      description: '',
+      price: '',
+      stock: '',
+      brandId: '',
+      categoryIds: [],
+      isActive: true
+    });
+    setSelectedBrand("");
+    setSelectedCategories([]);
+    setSizes([]);
+    setColors([]);
+    setImagePreview(null);
+  };
+
+  const handleAddNew = () => {
+    reset({
+      name: '',
+      description: '',
+      price: '',
+      stock: '',
+      brandId: '',
+      categoryIds: [],
+      isActive: true
+    });
+    setSelectedBrand("");
+    setSelectedCategories([]);
+    setSizes([]);
+    setColors([]);
+    setImagePreview(null);
+    setEditing(null);
+    setShowForm(true);
+  };
+
+  const onSubmit = async () => {
+    const values = getValues();
+    const updateData = {
+      name: values.name,
+      description: values.description,
+      price: values.price,
+      stock: values.stock,
+      isActive: values.isActive,
+      brandId: selectedBrand,
+      categoryIds: selectedCategories.map(Number),
+      sizes: selectedSizes,
+      colors: colors,
+    };
+    try {
+      if (editing) {
+        await mutationUpdate.mutateAsync({ id: editing.id, data: updateData });
+        if (imageFile) {
+          const form = new FormData();
+          form.append("files", imageFile);
+          form.append("type", "product");
+          form.append("objectId", editing.id);
+          console.log('FormData contents for update:', {
+            file: imageFile,
+            type: "product",
+            objectId: editing.id
+          });
+          try {
+            const response = await api.post("/images/upload", form, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+            });
+            console.log('Image upload response for update:', response.data);
+          } catch (error) {
+            console.error('Error uploading image for update:', {
+              error,
+              response: error.response?.data,
+              status: error.response?.status,
+              headers: error.response?.headers,
+              request: error.request
+            });
+            toast.error('Lỗi upload ảnh: ' + (error.response?.data?.message || error.message || 'Không xác định'));
+            throw error;
+          }
+        }
+      } else {
+        await mutationCreate.mutateAsync(updateData);
+      }
+      handleCloseForm();
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
   };
 
@@ -301,12 +393,12 @@ export default function AdminProductPage() {
                 <td className="border px-2 py-1 text-center">
                   {p.images && p.images.length > 0 ? (
                     <img
-                      src={`/api/images/download?path=${encodeURIComponent(p.images[0].path)}`}
+                      src={imageService.getImageUrl(p.images[0].path)}
                       alt={p.name}
                       className="w-16 h-16 object-cover mx-auto rounded"
                     />
                   ) : (
-                    <span className="text-gray-400">Không có ảnh</span>
+                    <span className="text-gray-400">No image</span>
                   )}
                 </td>
                 <td className="border px-2 py-1 font-semibold">{p.name}</td>
@@ -315,22 +407,28 @@ export default function AdminProductPage() {
                 <td className="border px-2 py-1">{Array.isArray(p.colors) ? p.colors.join(', ') : ''}</td>
                 <td className="border px-2 py-1">{p.brand?.name}</td>
                 <td className="border px-2 py-1">{Array.isArray(p.categories) ? p.categories.map(c => c.name).join(', ') : ''}</td>
-                <td className="border px-2 py-1">{p.isActive ? 'Hoạt động' : 'Ẩn'}</td>
+                <td className="border px-2 py-1">
+                  <span className={`px-2 py-1 rounded ${p.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {p.isActive ? 'Active' : 'Inactive'}
+                  </span>
+                </td>
                 <td className="border px-2 py-1">{p.createdAt ? new Date(p.createdAt).toLocaleString('vi-VN') : ''}</td>
                 <td className="border px-2 py-1">{p.updatedAt ? new Date(p.updatedAt).toLocaleString('vi-VN') : ''}</td>
                 <td className="border px-2 py-1">
-                  <button
-                    className="text-blue-600 mr-2"
-                    onClick={() => openEdit(p)}
-                  >
-                    Sửa
-                  </button>
-                  <button
-                    className="text-red-600"
-                    // onClick={() => deleteMutation.mutate(p.id)}
-                  >
-                    Xóa
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                      onClick={() => openEdit(p)}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                      onClick={() => deleteMutation.mutate(p.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -345,7 +443,7 @@ export default function AdminProductPage() {
             className="bg-white p-6 rounded shadow w-[500px] max-h-[90vh] overflow-y-auto"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <h2 className="text-xl font-bold mb-4">{editingProduct ? "Sửa sản phẩm" : "Thêm sản phẩm"}</h2>
+            <h2 className="text-xl font-bold mb-4">{editing ? "Sửa sản phẩm" : "Thêm sản phẩm"}</h2>
             <div className="mb-2">
               <label className="block mb-1">Tên sản phẩm</label>
               <input className="border px-2 py-1 w-full" {...register("name", { required: true })} />
@@ -375,7 +473,7 @@ export default function AdminProductPage() {
             <div className="mb-2">
               <label className="block mb-1">Size</label>
               <div className="flex flex-wrap gap-2">
-                {sizes.map((size) => (
+                {ALL_SIZES.map((size) => (
                   <label key={size} className="flex items-center gap-1">
                     <input
                       type="checkbox"
@@ -430,28 +528,38 @@ export default function AdminProductPage() {
                 ))}
               </div>
             </div>
-            <div className="mb-2">
-              <label className="block mb-1">Ảnh sản phẩm</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setImageFile(e.target.files[0])}
+                onChange={handleImageChange}
+                className="w-full p-2 border rounded"
               />
+              {imagePreview && (
+                <div className="mt-2">
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    className="w-32 h-32 object-cover rounded"
+                  />
+                </div>
+              )}
             </div>
             <div className="flex justify-end gap-2 mt-4">
-              <button
-                type="button"
-                className="px-3 py-1 bg-gray-300 rounded"
-                onClick={() => { setShowForm(false); setEditingProduct(null); }}
+              <button 
+                type="button" 
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors" 
+                onClick={handleCloseForm}
               >
-                Hủy
+                Cancel
               </button>
-              <button
-                type="submit"
-                className="px-3 py-1 bg-blue-600 text-white rounded"
+              <button 
+                type="submit" 
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
                 disabled={mutationCreate.isPending || mutationUpdate.isPending}
               >
-                {(mutationCreate.isPending || mutationUpdate.isPending) ? "Đang lưu..." : "Lưu"}
+                {(mutationCreate.isPending || mutationUpdate.isPending) ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
