@@ -1,9 +1,7 @@
 package com.sneakershop.service.impl;
 
 import com.sneakershop.constant.OrderStatus;
-import com.sneakershop.constant.PaymentStatus;
 import com.sneakershop.dto.request.OrderRequest;
-import com.sneakershop.dto.request.OrderUpdateRequest;
 import com.sneakershop.dto.response.OrderResponse;
 import com.sneakershop.entity.*;
 import com.sneakershop.exception.AppException;
@@ -54,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         order.setPhoneNumber(request.getPhoneNumber());
         order.setEmail(request.getEmail());
         order.setPaymentMethod(request.getPaymentMethod());
-        order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setPaymentStatus("PENDING");
         order.setStatus(OrderStatus.PENDING);
         order.setNote(request.getNote());
 
@@ -108,11 +106,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponse updateOrder(Long orderId, OrderUpdateRequest request) {
+    public OrderResponse updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
-        orderMapper.updateOrder(order, request);
-        return orderMapper.toResponse(orderRepository.save(order));
+        try {
+            OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
+            order.setStatus(newStatus);
+            Order savedOrder = orderRepository.save(order);
+            return orderMapper.toResponse(savedOrder);
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ErrorCode.INVALID_ORDER_STATUS);
+        }
     }
 
     @Override

@@ -72,12 +72,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/auth/register", "/auth/login", "/error").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/products/**").permitAll()
                                 .requestMatchers("/categories/**").permitAll()
                                 .requestMatchers("/brands/**").permitAll()
-                                .requestMatchers("/images/download/**").permitAll()
-                                .requestMatchers("/images").permitAll()
+                                .requestMatchers("/images/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 

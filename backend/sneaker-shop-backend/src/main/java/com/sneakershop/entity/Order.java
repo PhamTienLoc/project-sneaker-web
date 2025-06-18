@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 import com.sneakershop.constant.OrderStatus;
-import com.sneakershop.constant.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -53,9 +52,8 @@ public class Order extends BaseEntity {
     @Column(name = "payment_method", nullable = false)
     String paymentMethod;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
-    PaymentStatus paymentStatus = PaymentStatus.PENDING;
+    String paymentStatus;
 
     @Column(name = "note")
     String note;

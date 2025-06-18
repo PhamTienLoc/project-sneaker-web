@@ -1,6 +1,5 @@
 package com.sneakershop.dto.request;
 
-import com.sneakershop.constant.PaymentStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -19,8 +18,6 @@ public class OrderRequest {
 
     @NotBlank(message = "PAYMENT_METHOD_REQUIRED")
     private String paymentMethod;
-
-    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
     private String note;
 }

@@ -22,7 +22,6 @@ public class Role extends BaseEntity {
     @Column(unique = true, nullable = false)
     String name;
 
-    @Column(columnDefinition = "TEXT")
     String description;
 
     @ManyToMany(mappedBy = "roles")
